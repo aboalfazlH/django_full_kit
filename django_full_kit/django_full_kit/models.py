@@ -1,9 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 from .validators import auth,utils
 from .upload_paths import user_avatar_upload_path
 from django.utils import timezone
+
+User = get_user_model()
 
 # --------------------------
 # Advanced Fields
@@ -98,3 +101,30 @@ class AdvancedBaseUser(AbstractUser):
     
     def __str__(self):
         return self.get_full_name or self.username
+
+# -------------
+# Blog models
+# -------------
+class BaseBlog(models.Model):
+    """
+    Blog model so that the author can have several different 
+    blogs for their work, 
+    such as https://www.blogsky.com/
+    """
+    name = models.CharField(verbose_name=_("Blog name"),max_length=110)
+    content = models.TextField(verbose_name=_("Content"),blank=True,null=True)
+    
+    is_active = models.BooleanField(verbose_name=_("Active"),default=True)
+    
+    blogger = models.ForeignKey(User,on_delete=models.CASCADE,verbose_name=_("Blogger"))
+
+    start_date = models.DateTimeField(verbose_name=_("Start date"),auto_now_add=True)
+    last_update = models.DateTimeField(verbose_name=_("Last update"),auto_now=True)
+
+    class Meta:
+        verbose_name = _("Blog")
+        verbose_name_plural = _("Blogs")
+        abstract = True
+
+    def __str__(self):
+        return self.name
