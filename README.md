@@ -1,6 +1,6 @@
 # Django Full Kit
 
-A reusable Django package providing ready-to-use models, admin configurations, and utilities for common project needs such as users and articles.
+A reusable Django package providing ready-to-use models, admin configurations, and utilities for common project needs such as users and articles.Powered by developlab
 
 ---
 
