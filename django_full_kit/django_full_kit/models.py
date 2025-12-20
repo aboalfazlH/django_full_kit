@@ -27,20 +27,21 @@ class PhoneNumberField(models.CharField):
 class VideoField(models.FileField):
     """
     Custom Django model field for video
-    Usage: like models.EmailField
+    Usage: like models.ImageField
     """
     default_validators = [
         utils.video_validator
     ]
     description = "support video"
 
-class VideoField(models.FileField):
+
+class AudioField(models.FileField):
     """
-    Custom Django model field for video
-    Usage: like models.EmailField
+    Custom Django model field for Audio
+    Usage: like models.ImageField
     """
     default_validators = [
-        utils.video_validator
+        utils.audio_validator
     ]
     description = "support audio"
 
