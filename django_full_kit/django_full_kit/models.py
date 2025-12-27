@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 from utils import validators
-from .upload_paths import user_avatar_upload_path
+from .upload_paths import user_avatar_upload_path,article_thumbnail_upload_path
 
 User = get_user_model()
 
@@ -128,3 +128,85 @@ class BaseBlog(models.Model):
 
     def __str__(self):
         return self.name
+    
+
+class BaseArticle(models.Model):
+    blog = None # If you use a blog, fill it out.
+    author = models.ForeignKey(User,on_delete=models.CASCADE,verbose_name=_("Author"))
+    
+    title = models.CharField(verbose_name=_("Title"),max_length=110)
+    description = models.TextField(verbose_name=_("description"),blank=True,null=True)
+    
+    thumbnail = models.ImageField(upload_to=article_thumbnail_upload_path,verbose_name=_("Thumbnail"))
+    
+    is_active = models.BooleanField(default=True,verbose_name=_("Active"))
+    is_pin = models.BooleanField(default=False,verbose_name=_("Pin"))
+    is_verify = models.BooleanField(default=False,verbose_name=_("Verify"))
+
+    from django.conf import settings
+from django.db import models
+from django.utils.translation import gettext_lazy as _
+
+
+class BaseArticle(models.Model):
+    # Optional blog relation (should be overridden in child models if needed)
+    blog = None
+
+    author = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="articles",
+        verbose_name=_("Author"),
+    )
+
+    title = models.CharField(
+        max_length=110,
+        verbose_name=_("Title"),
+    )
+
+    description = models.TextField(
+        blank=True,
+        null=True,
+        verbose_name=_("Description"),
+    )
+
+    thumbnail = models.ImageField(
+        upload_to=article_thumbnail_upload_path,
+        blank=True,
+        null=True,
+        verbose_name=_("Thumbnail"),
+    )
+
+    is_active = models.BooleanField(
+        default=True,
+        verbose_name=_("Active"),
+    )
+
+    is_pin = models.BooleanField(
+        default=False,
+        verbose_name=_("Pinned"),
+    )
+
+    is_verify = models.BooleanField(
+        default=False,
+        verbose_name=_("Verified"),
+    )
+
+    create_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name=_("Created At"),
+    )
+
+    update_at = models.DateTimeField(
+        auto_now=True,
+        verbose_name=_("Updated At"),
+    )
+
+    class Meta:
+        abstract = True
+        ordering = ("-created_at",)
+        verbose_name = _("Article")
+        verbose_name_plural = _("Articles")
+    
+    def __str__(self):
+        return self.title
