@@ -9,4 +9,4 @@ common project needs such as users and articles.
 
 __all__ = ["apps"]
 __version__ = "0.3.0"
-default_app_config = "django_full_kit.apps.FullKitConfig"
+default_app_config = "apps.FullKitConfig"
