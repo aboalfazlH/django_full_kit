@@ -29,7 +29,7 @@ Add the app to your `INSTALLED_APPS`:
 ```python
 INSTALLED_APPS = [
     ...
-    "full_kit",
+    "django_full_kit",
 ]
 ```
 
